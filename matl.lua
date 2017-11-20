@@ -340,6 +340,47 @@ function getEnc(name)
 	return res
 end
 
+function getBan(player)
+	local flag = true
+	if not tools:file_exists(commandparser.banpath) then 
+		print(lang.unsuccesful_create_file)
+		matlInicio()
+	else
+		local msgArray = tools:lines_from(commandparser.banpath)
+			if #msgArray ~= 0 then
+				--only test
+				local banss= tools:readd(commandparser.banpath,';')
+				local myi = -1
+				local count=0
+				for i in pairs (msgArray) do
+					if banss[i][3] == tostring(player:getguid()) then
+						 local actualtime = os.time()
+						 if tonumber(banss[i][8]) > actualtime then
+							 local msg= lang.bankick_temp_with_reason:gsub("@admin",banss[i][5])
+							 msg= msg:gsub("@time_left",os.date("%c",tonumber(banss[i][8])))
+						 	msg= msg:gsub("@reason",banss[i][6])
+						 	msg= msg:gsub("@time_issued ",os.date("%c",tonumber(banss[i][7])))
+							 msg= msg:gsub("@banid",tostring(i))
+						 	if config.clansite ~= nil and config.clansite ~= "" then 
+								msg= msg:gsub("@website",config.clansite)
+							 else
+								msg= msg:gsub("@website",lang.website_nosite_error_msg)
+							 end
+							 gsc.iprintln(string.format("%s %s",player.name,msg))
+							 util.executeCommand(string.format("dropclient %s \"%s\"",tostring(player:getentitynumber()),msg))
+							 flag = false
+						else
+							table.remove(banss,i)
+							tools:writed(commandparser.banpath,banss,';')
+							--decir algo :V
+						end
+					end
+				end
+			end
+	end
+	return flag
+end
+
 function initvota()
 	if config.voting_enabled then
 		vote=nil
@@ -435,23 +476,23 @@ function onPlayerConnecting(args)
 end
 
 function onPlayerConnected(player)
-	--Checar gente baneada :v
-
-	local rango = tonumber(checkAdmin(player:getguid()))
-	if rango == nil then
+	if getBan(player) then
+		local rango = tonumber(checkAdmin(player:getguid()))
+		if rango == nil then
 		rango = 0
-	end
-	if rango ~= 0 then 
-		local welcome = getMensajeGroup(rango)
-		if welcome ~= "" then
-			commandparser:sayAll(welcome:gsub("@name",player.name,1))
-		else
-			commandparser:sayAll(lang.welcome_msg_admin_default:gsub("@name",player.name,1))
 		end
-	else
-		commandparser:sayAll(lang.welcome_msg_new:gsub("@name",player.name,1))
+		if rango ~= 0 then 
+			local welcome = getMensajeGroup(rango)
+			if welcome ~= "" then
+				commandparser:sayAll(welcome:gsub("@name",player.name,1))
+			else
+				commandparser:sayAll(lang.welcome_msg_admin_default:gsub("@name",player.name,1))
+			end
+		else
+			commandparser:sayAll(lang.welcome_msg_new:gsub("@name",player.name,1))
+		end
+		print("[enPlayerConectado]: " .. player.name .. " :".. tostring(player.ip))
 	end
-	print("[enPlayerConectado]: " .. player.name .. " :".. tostring(player.ip))
 end
 
 function onPlayerRequestingConnection(args)

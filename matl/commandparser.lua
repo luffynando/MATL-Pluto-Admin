@@ -100,10 +100,6 @@ function commandparser:sayAll(message)
 	util.chatPrint(consoleName .. message)
 end
 
-function commandparser:screenSet(message)
-    gsc.iprintlnbold(message)
-end
-
 function commandparser:custumMsg(msg)
 	gsc.iprintln(string.format("%s %s",config.sysprefix,msg))
 end
