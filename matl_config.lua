@@ -190,6 +190,7 @@ function config:getlang()
         lang.rotation_error_no_match="El dsr especificado no esta en la carpeta admin :S, dejando por default."
         lang.rotation_error_no_maps="El campo maps esta vacio no se puede asignar :s, dejando por default"
         lang.rotation_error_no_match_map="No se encontro ningun mapa con el nombre especificado Dejando por default"
+        lang.freeze_error_msg="^1Error el formato es: ^2!freeze name"
     return lang
 end
 

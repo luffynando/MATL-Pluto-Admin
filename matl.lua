@@ -357,9 +357,9 @@ function getBan(player)
 						 local actualtime = os.time()
 						 if tonumber(banss[i][8]) > actualtime then
 							 local msg= lang.bankick_temp_with_reason:gsub("@admin",banss[i][5])
-							 msg= msg:gsub("@time_left",os.date("%c",tonumber(banss[i][8])))
+							 msg= msg:gsub("@time_left",os.date("%H",tonumber(banss[i][8])))
 						 	msg= msg:gsub("@reason",banss[i][6])
-						 	msg= msg:gsub("@time_issued ",os.date("%c",tonumber(banss[i][7])))
+						 	msg= msg:gsub("@time_issued ",os.date("%H",tonumber(banss[i][7])))
 							 msg= msg:gsub("@banid",tostring(i))
 						 	if config.clansite ~= nil and config.clansite ~= "" then 
 								msg= msg:gsub("@website",config.clansite)
@@ -367,7 +367,7 @@ function getBan(player)
 								msg= msg:gsub("@website",lang.website_nosite_error_msg)
 							 end
 							 gsc.iprintln(string.format("%s %s",player.name,msg))
-							 util.executeCommand(string.format("dropclient %s \"%s\"",tostring(player:getentitynumber()),msg))
+							 callbacks.afterDelay.add(1000,function()util.executeCommand(string.format("dropclient %s \"%s\"",tostring(player:getentitynumber()),msg))end)
 							 flag = false
 						else
 							table.remove(banss,i)
@@ -551,7 +551,7 @@ end
 
 function matlAddClient(id,name,guild,ip,alias,status)
 	local file= assert(io.open(commandparser.clientspath,"a+"))
-	file:write(string.format("%s;%s;%s;%s;%s;%s",tostring(id),name,tostring(guild),tostring(ip),alias,tostring(status),"\n")
+	file:write(string.format("%s;%s;%s;%s;%s;%s",tostring(id),name,tostring(guild),tostring(ip),alias,tostring(status),"\n"))
 	file:close()
 end
 

@@ -165,7 +165,7 @@ function commandparser:darbanbarang(solicitante, rango, tipo ,segpar, terpar, ti
 						local banmsg= lang.ban_with_reason_time:gsub("@admin",prefix..solicitante.name)
 						banmsg= banmsg:gsub("@reason", terpar)
 						banmsg= banmsg:gsub("@banid",tostring(#msgArray2 +1))
-						banmsg= banmsg:gsub("@website",config.website)
+						banmsg= banmsg:gsub("@website",config.clansite)
 						banmsg= banmsg:gsub("@duration", os.date("%c",times))
 						util.executeCommand(string.format("dropclient %s \"%s\"",tostring(segundo:getentitynumber()),banmsg))
 					elseif tipo == "pban" then
@@ -174,7 +174,7 @@ function commandparser:darbanbarang(solicitante, rango, tipo ,segpar, terpar, ti
 						local banmsg= lang.permban_with_reason:gsub("@admin",prefix..solicitante.name)
 						banmsg= banmsg:gsub("@reason", terpar)
 						banmsg= banmsg:gsub("@banid",tostring(#msgArray2 +1))
-						banmsg= banmsg:gsub("@website",config.website)
+						banmsg= banmsg:gsub("@website",config.clansite)
 						util.executeCommand(string.format("dropclient %s \"%s\"",tostring(segundo:getentitynumber()),banmsg))
 					else
 						util.executeCommand(string.format("dropclient %s \"%s\"",tostring(segundo:getentitynumber()),lang.kick_with_reason:gsub("@reason",terpar)))
@@ -1472,6 +1472,25 @@ function commands.setalias(player, args)
 	
 end
 
+function commandparser.freeze(player,args)
+	if args ~= nil and args ~= "" then 
+		local segundo= getPlayer(player,args)
+		if segundo ~= nil then 
+			if segundo.freezecontrols then 
+				segundo.freezecontrols = false
+				segundo:iPrintLnBold("Test1")
+			else
+				segundo.freezecontrols = true
+				segundo:iPrintLnBold("Test2")
+			end
+		else
+			player:iPrintLnBold((lang.error_noplayer_msg:gsub("@player",args)))
+		end
+	else
+		player:iPrintLnBold(lang.freeze_error_msg)
+	end
+end
+
 function commandparser.run(sender,rango,args,command)
 	local commandname= string.sub(command,2)
 	local commandrango = commandparser:checkrangocommand(commandname)
@@ -1573,6 +1592,7 @@ function commandparser:init()
 	commandparser.add("n",0,"!n")
 	commandparser.add("myguid",0,"!myguid")
 	commandparser.add("votecancel",0,"!votecancel")
+	commandparser.add("freeze",1,"!freeze name")
 end
 
 return commandparser
