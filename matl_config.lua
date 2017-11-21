@@ -192,6 +192,8 @@ function config:getlang()
         lang.rotation_error_no_maps="El campo maps esta vacio no se puede asignar :s, dejando por default"
         lang.rotation_error_no_match_map="No se encontro ningun mapa con el nombre especificado Dejando por default"
         lang.freeze_error_msg="^1Error el formato es: ^2!freeze name"
+        lang.freeze_succesful_player_msg="Se te han bloqueado los controles"
+        lang.freeze_succesful_admin_msg="Se le han bloqueado los controles a @player"
         lang.setalias_error_msg="^1Error el formato es: ^2!setalias name,newalias"
         lang.setalias_error_empty_alias="^1Error no puedes definir un alias vacio"
         lang.setalias_succesful_msg="^2Exito se ha agregado al usuario el alias"
@@ -203,6 +205,9 @@ function config:getlang()
         lang.delalias_error_no_found="^1Error no se encontro @name dentro de los que tienen alias"
         lang.delalias_error_no_players="^1Error no hay ningun cliente registrado"
         lang.delalias_succesful_msg="^2Exito se ha retirado con exito el alias del cliente"
+        lang.unfreeze_error_msg="^1Error el formato es !unfreeze name"
+        lang.unfreeze_succesful_player_msg="Se te han desbloqueado los controles"
+        lang.unfreeze_succesful_admin_msg="Se le han desbloqueado los controles a @player"
     return lang
 end
 

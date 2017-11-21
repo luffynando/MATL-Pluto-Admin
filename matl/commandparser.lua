@@ -1566,22 +1566,34 @@ end
 
 function commandparser.freeze(player,args)
 	player:iPrintLnBold(lang.comming_soon_msg)
-	--[[if args ~= nil and args ~= "" then 
+	if args ~= nil and args ~= "" then 
 		local segundo= getPlayer(player,args)
 		if segundo ~= nil then 
-			if segundo.freezecontrols then 
-				segundo.freezecontrols = false
-				segundo:iPrintLnBold("Test1")
-			else
-				segundo.freezecontrols = true
-				segundo:iPrintLnBold("Test2")
-			end
+			segundo:freezeControls(true)
+			segundo:iPrintLnBold(lang.freeze_succesful_player_msg)
+			player:iPrintLnBold((lang.freeze_succesful_admin_msg:gsub("@player",segundo.name)))
 		else
 			player:iPrintLnBold((lang.error_noplayer_msg:gsub("@player",args)))
 		end
 	else
 		player:iPrintLnBold(lang.freeze_error_msg)
-	end--]]
+	end
+end
+
+function commandparser.unfreeze(player,args)
+	player:iPrintLnBold(lang.comming_soon_msg)
+	if args ~= nil and args ~= "" then 
+		local segundo= getPlayer(player,args)
+		if segundo ~= nil then 
+			segundo:freezeControls(false)
+			segundo:iPrintLnBold(lang.unfreeze_succesful_player_msg)
+			player:iPrintLnBold((lang.unfreeze_succesful_admin_msg:gsub("@player",segundo.name)))
+		else
+			player:iPrintLnBold((lang.error_noplayer_msg:gsub("@player",args)))
+		end
+	else
+		player:iPrintLnBold(lang.unfreeze_error_msg)
+	end
 end
 
 function commandparser.run(sender,rango,args,command)
@@ -1688,6 +1700,7 @@ function commandparser:init()
 	commandparser.add("freeze",1,"!freeze name")
 	commandparser.add("setalias",1,"!setalias name,newalias")
 	commandparser.add("delalias",1,"!delalias name")
+	commandparser.add("unfreeze",1,"!unfreeze name")
 end
 
 return commandparser
