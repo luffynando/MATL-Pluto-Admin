@@ -208,6 +208,12 @@ function config:getlang()
         lang.unfreeze_error_msg="^1Error el formato es !unfreeze name"
         lang.unfreeze_succesful_player_msg="Se te han desbloqueado los controles"
         lang.unfreeze_succesful_admin_msg="Se le han desbloqueado los controles a @player"
+        lang.blockchat_error_msg="^1Error el formato es !blockchat name"
+        lang.blockchat_succesful_player_msg="Se te ha bloqueado el chat"
+        lang.blockchat_succesful_admin_msg="Se le ha bloqueado el chat correctamente a @player"
+        lang.unblockchat_error_msg="^1Error el formato es !unblockchat name"
+        lang.unblockchat_succesful_player_msg="Se te ha desbloqueado el chat"
+        lang.unblockchat_succesful_admin_msg="Se le ha desbloqueado el chat correctamente a @player"
     return lang
 end
 

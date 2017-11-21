@@ -950,6 +950,10 @@ function onPlayerSay(args)
 	if config.logconsole_enabled then
 		commandparser:updatelogConsole(args)
 	end
+	if sender.data.blockchat ~= nil and sender.data.blockchat == true then 
+		sender:iPrintLnBold(lang.blockchat_succesful_player_msg)
+		return true
+	end
 	if (rango ~= 0) then
 		prefix= getPrefix(rango)
 		if alias == nil then 

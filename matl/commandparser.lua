@@ -1565,7 +1565,6 @@ function commandparser.delalias(player,args)
 end
 
 function commandparser.freeze(player,args)
-	player:iPrintLnBold(lang.comming_soon_msg)
 	if args ~= nil and args ~= "" then 
 		local segundo= getPlayer(player,args)
 		if segundo ~= nil then 
@@ -1581,7 +1580,6 @@ function commandparser.freeze(player,args)
 end
 
 function commandparser.unfreeze(player,args)
-	player:iPrintLnBold(lang.comming_soon_msg)
 	if args ~= nil and args ~= "" then 
 		local segundo= getPlayer(player,args)
 		if segundo ~= nil then 
@@ -1593,6 +1591,36 @@ function commandparser.unfreeze(player,args)
 		end
 	else
 		player:iPrintLnBold(lang.unfreeze_error_msg)
+	end
+end
+
+function commandparser.blockchat(player,args)
+	if args ~= nil and args ~= "" then
+		local segundo= getPlayer(player,args)
+		if segundo ~= nil then  
+			segundo.data.blockchat = true
+			segundo:iPrintLnBold(lang.blockchat_succesful_player_msg)
+			player:iPrintLnBold((lang.blockchat_succesful_admin_msg:gsub("@player",segundo.name)))
+		else
+			player:iPrintLnBold((lang.error_noplayer_msg:gsub("@player",args)))
+		end
+	else
+		player:iPrintLnBold(lang.blockchat_error_msg)
+	end
+end
+
+function commandparser.unblockchat(player,args)
+	if args ~= nil and args ~= "" then
+		local segundo= getPlayer(player,args)
+		if segundo ~= nil then  
+			segundo.data.blockchat = false
+			segundo:iPrintLnBold(lang.unblockchat_succesful_player_msg)
+			player:iPrintLnBold((lang.unblockchat_succesful_admin_msg:gsub("@player",segundo.name)))
+		else
+			player:iPrintLnBold((lang.error_noplayer_msg:gsub("@player",args)))
+		end
+	else
+		player:iPrintLnBold(lang.unblockchat_error_msg)
 	end
 end
 
@@ -1701,6 +1729,8 @@ function commandparser:init()
 	commandparser.add("setalias",1,"!setalias name,newalias")
 	commandparser.add("delalias",1,"!delalias name")
 	commandparser.add("unfreeze",1,"!unfreeze name")
+	commandparser.add("blockchat",1,"!blockchat name")
+	commandparser.add("unblockchat",1,"!unblockchat name")
 end
 
 return commandparser
