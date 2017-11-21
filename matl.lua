@@ -211,6 +211,7 @@ function matlCommands(path)
 	newfile4:write("\t<command abrev=\"\" minrango=\"0\">whoami</command>","\n")
 	newfile4:write("\t<command abrev=\"\" minrango=\"0\">techinfo</command>","\n")
 	newfile4:write("\t<command abrev=\"alias\" minrango=\"80\">setalias</command>","\n")
+	newfile4:write("\t<command abrev=\"\" minrango=\"80\">delalias</command>","\n")
 	newfile4:write("\t<command abrev=\"\" minrango=\"100\">cmd</command>","\n")
 	newfile4:write("\t<command abrev=\"ia\" minrango=\"80\">infammo</command>","\n")
 	newfile4:write("\t<command abrev=\"\" minrango=\"60\">fly</command>","\n")
@@ -630,7 +631,7 @@ function getAlias(guild)
 				local ban=0
 				local myguild = tostring(guild)
 				while  (i <= #msgArray) and (ban ~= 1)    do
-					local adminguild= tostring(adminss[i][4])
+					local adminguild= tostring(adminss[i][3])
 					if  adminguild == myguild then
 						alias= adminss[i][5]
 						ban=1
@@ -853,8 +854,6 @@ function getPlayer(peticion, nam)
 	return player
 end
 
-
-
 function resetvote()
 	local votedplayers={}
 	for i=1,18,1 do
@@ -936,6 +935,7 @@ function onPlayerSay(args)
 	local lowerMsg = args.message:lower()
 	local chunks = lowerMsg:split(" ")
 	local prefix=""
+	local alias=getAlias(sender:getguid())
 	local rango = tonumber(checkAdmin(args.sender:getguid()))
 	if rango == nil then
 		rango = 0
@@ -951,22 +951,44 @@ function onPlayerSay(args)
 	end
 	if (rango ~= 0) then
 		prefix= getPrefix(rango)
+		if alias == nil then 
+			alias = sender.name
+		end
 		local death= ""
-		if args.sender.Health ~= nil and args.sender.Health ~= 0 then
+		if sender.Health ~= nil and sender.Health ~= 0 then
 				death=""
 			else
 				death="^7[Dead]"
 		end
 		if args.chatMode == 0 then 
-			util.chatPrint(death..prefix .. args.sender.name .. ": ^7".. args.message)
+			util.chatPrint(death..prefix .. alias .. ": ^7".. args.message)
 		elseif args.chatMode == 1 then
 			for p in util.iterPlayers() do
-				if string.find(p.sessionteam, args.sender.sessionteam) then
-						commandparser:sayToPlayer(p,death.."[T]"..prefix .. args.sender.name .. ": ^7".. args.message)
+				if string.find(p.sessionteam, sender.sessionteam) then
+						commandparser:sayToPlayer(p,death.."[T]"..prefix .. alias .. ": ^7".. args.message)
 				end
 			end
 		end
 		return true
+	else
+		if alias ~= nil then 
+			local death= ""
+			if sender.Health ~= nil and sender.Health ~= 0 then
+					death=""
+				else
+					death="^7[Dead]"
+			end
+			if args.chatMode == 0 then 
+				util.chatPrint(death .. alias .. ": ^7".. args.message)
+			elseif args.chatMode == 1 then
+				for p in util.iterPlayers() do
+					if string.find(p.sessionteam, args.sender.sessionteam) then
+							commandparser:sayToPlayer(p,death.."[T]".. alias .. ": ^7".. args.message)
+					end
+				end
+			end
+			return true
+		end
 	end
 	return false
 end

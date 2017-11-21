@@ -2,6 +2,7 @@ config={}
 
 function config:getlang()
     local lang={}
+        lang.comming_soon_msg="Proximamente xD"
         lang.error_more_than_one_player="^1Hay mas de un jugador con ese nombre"
         lang.unsuccesful_create_file="No se ha creado el archivo :s"
         lang.norules="En este servidor no hay reglas :v"
@@ -191,6 +192,17 @@ function config:getlang()
         lang.rotation_error_no_maps="El campo maps esta vacio no se puede asignar :s, dejando por default"
         lang.rotation_error_no_match_map="No se encontro ningun mapa con el nombre especificado Dejando por default"
         lang.freeze_error_msg="^1Error el formato es: ^2!freeze name"
+        lang.setalias_error_msg="^1Error el formato es: ^2!setalias name,newalias"
+        lang.setalias_error_empty_alias="^1Error no puedes definir un alias vacio"
+        lang.setalias_succesful_msg="^2Exito se ha agregado al usuario el alias"
+        lang.setalias_error_no_file="^1Error no se pudo definir el alias porque el archivo no existe"
+        lang.setalias_notification_msg="^2Se te ha concedido el alias ^7@alias"
+        lang.setalias_error_len_msg="^1El alias tiene que ser menor a @len caracteres"
+        lang.delalias_error_msg="^1Error el formato es: ^2!delalias name"
+        lang.delalias_error_no_file="^1Error no se puede borrar un alias porque no hay archivo"
+        lang.delalias_error_no_found="^1Error no se encontro @name dentro de los que tienen alias"
+        lang.delalias_error_no_players="^1Error no hay ningun cliente registrado"
+        lang.delalias_succesful_msg="^2Exito se ha retirado con exito el alias del cliente"
     return lang
 end
 
@@ -223,6 +235,9 @@ config.warn_bantime= 7200
 --Bans
 config.ban_default_reason="Hacks"
 config.ban_default_duration=10800
+
+--Alias
+config.alias_len_max=13
 
 --Sensor de ping --aun en progreso
 --config.pingcensor_enabled=true

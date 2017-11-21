@@ -13,7 +13,7 @@ commandparser.commandspath= string.format(".//scripts//mp//matl//%s",config.comm
 commandparser.groupspath= string.format(".//scripts//mp//matl//%s",config.groups)
 commandparser.maprotpath= string.format(".//scripts//mp//matl//%s", config.maprot_file)
 commandparser.spotspath= string.format(".//scripts//mp//matl//%s", config.spots)
-commandparser.clientspath= string.format(".//scripts//mp//matl//$s", config.clients)
+commandparser.clientspath= string.format(".//scripts//mp//matl//%s", config.clients)
 
 function commandparser:getversion()
     print("Version 0.1")
@@ -27,6 +27,15 @@ function commandparser:has_value(tab, val)
     end
 
     return false
+end
+
+function commandparser:emptyAlias(var)
+	local count = var:len()+1
+	local test= var:split(" ")
+	if count == #test then 
+		return true
+	end
+	return false
 end
 
 function commandparser.add(name,numargs,sintax)
@@ -1468,12 +1477,96 @@ function commandparser.votecancel(player)
 	end
 end
 
-function commands.setalias(player, args)
-	
+function commandparser.setalias(player, args)
+	local partes= args:split(",")
+	if partes[1] ~= nil and partes[1] ~= "" then 
+		local segundo= getPlayer(player,partes[1])
+		if segundo ~= nil then 
+			if partes[2] ~= nil and partes[2] ~= "" and commandparser:emptyAlias(partes[2]) ~= true then 
+				if config.alias_len_max >= partes[2]:len() then
+					if not tools:file_exists(commandparser.clientspath) then 
+						print(lang.unsuccesful_create_file)
+						matlInicio()
+						player:iPrintLnBold(lang.setalias_error_no_file)
+					else
+						local msgArray = tools:lines_from(commandparser.clientspath)
+						if #msgArray ~= 0 then
+							--only test
+							local clients= tools:readd(commandparser.clientspath,';',false)
+							local i=1
+							local ban=0
+							local myguild = tostring(segundo:getguid())
+							while  (i <= #msgArray) and (ban ~= 1)    do
+								local adminguild= tostring(clients[i][3])
+								if  adminguild == myguild then
+									clients[i][5] = partes[2]
+									ban=1
+								end
+								i=i+1
+							end
+							if ban ==1 then
+								tools:writed(commandparser.clientspath,clients,';')
+							else
+								matlAddClient(#msgArray+1,segundo.name,segundo:getguid(),segundo.ip,partes[2],1)
+							end
+						else
+							matlAddClient(#msgArray+1,segundo.name,segundo:getguid(),segundo.ip,partes[2],1)
+						end
+						player:iPrintLnBold(lang.setalias_succesful_msg)
+						segundo:iPrintLnBold((lang.setalias_notification_msg:gsub("@alias",partes[2])))
+					end
+				else
+					player:iPrintLnBold((lang.setalias_error_len_msg:gsub("@len",tostring(config.alias_len_max))))
+				end
+			else
+				player:iPrintLnBold(lang.setalias_error_empty_alias)
+			end
+		else
+			player:iPrintLnBold((lang.error_noplayer_msg:gsub("@player",partes[1])))
+		end
+	else
+		player:iPrintLnBold(lang.setalias_error_msg)
+	end
+end
+
+function commandparser.delalias(player,args)
+	if args ~= nil and args ~= "" then 
+		if not tools:file_exists(commandparser.clientspath) then 
+			print(lang.unsuccesful_create_file)
+			matlInicio()
+			player:iPrintLnBold(lang.delalias_error_no_file)
+		else
+			local msgArray = tools:lines_from(commandparser.clientspath)
+			if #msgArray ~= 0 then
+				--only test
+				local clients= tools:readd(commandparser.clientspath,';',false)
+				local i=1
+				local ban=0
+				while  (i <= #msgArray) and (ban ~= 1)    do
+					if  clients[i][2] == args then
+						clients[i][5] = ""
+						ban=1
+					end
+					i=i+1
+				end
+				if ban == 1 then
+					tools:writed(commandparser.clientspath,clients,';')
+					player:iPrintLnBold(lang.delalias_succesful_msg)
+				else
+					player:iPrintLnBold((lang.delalias_error_no_found:gsub("@name",args)))
+				end
+			else
+				player:iPrintLnBold(lang.delalias_error_no_players)
+			end
+		end
+	else
+		player:iPrintLnBold(lang.delalias_error_msg)
+	end
 end
 
 function commandparser.freeze(player,args)
-	if args ~= nil and args ~= "" then 
+	player:iPrintLnBold(lang.comming_soon_msg)
+	--[[if args ~= nil and args ~= "" then 
 		local segundo= getPlayer(player,args)
 		if segundo ~= nil then 
 			if segundo.freezecontrols then 
@@ -1488,7 +1581,7 @@ function commandparser.freeze(player,args)
 		end
 	else
 		player:iPrintLnBold(lang.freeze_error_msg)
-	end
+	end--]]
 end
 
 function commandparser.run(sender,rango,args,command)
@@ -1593,6 +1686,8 @@ function commandparser:init()
 	commandparser.add("myguid",0,"!myguid")
 	commandparser.add("votecancel",0,"!votecancel")
 	commandparser.add("freeze",1,"!freeze name")
+	commandparser.add("setalias",1,"!setalias name,newalias")
+	commandparser.add("delalias",1,"!delalias name")
 end
 
 return commandparser
