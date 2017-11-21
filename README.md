@@ -18,5 +18,5 @@ Simply drag & drop all the files of the repo in the scripts/mp folder of your MW
 
 ## License
 
-This project is licensed under the GNU General Public License v3.0 - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the GNU General Public License v3.0 - see the [LICENSE.md](LICENSE) file for details
 
