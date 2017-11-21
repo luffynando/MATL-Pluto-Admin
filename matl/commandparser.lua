@@ -513,7 +513,7 @@ function commandparser.groups(player)
 end
 
 function commandparser.credits(player)
-	player:tell("^2[M^7AT^1L] ^3v0.6 ^5by ^2~|^7M^1|~ ^7Clan ^2Maniacos")
+	player:tell("^2[M^7AT^1L] ^3v0.7 ^5by ^2~|^7M^1|~ ^7Clan ^2Maniacos")
 	player:tell("^2[M^7AT^1L] ^3Send^5me ^2Pack ^7in my ^2teamspeak")
 end
 
@@ -812,10 +812,15 @@ function commandparser.pm(player,args)
 		local segundoplayer2 = getPlayer(player, partes[1])
 		if segundoplayer2 ~=nil then
 			if partes[2] ~= nil and partes[2] ~= "" then
-				local msg= lang.pm_sintax_msg:gsub("@player",player.name)
-				msg= msg:gsub("@msg",partes[2])
-				commandparser:sayToPlayer(segundoplayer2,msg)
-				commandparser:sayTellPlayer(player,lang.pm_succesful_msg)
+				local newmsg = string.sub(args,partes[1]:len()+2)
+				if newmsg ~= nil and newmsg ~="" and commandparser:emptyAlias(newmsg) ~= true then 
+					local msg= lang.pm_sintax_msg:gsub("@player",player.name)
+					msg= msg:gsub("@msg",newmsg)
+					commandparser:sayToPlayer(segundoplayer2,msg)
+					commandparser:sayTellPlayer(player,lang.pm_succesful_msg)
+				else
+					player:iPrintLnBold(lang.tell_error_nomsg)
+				end
 			else
 				player:iPrintLnBold(lang.tell_error_nomsg)
 			end
