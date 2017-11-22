@@ -553,7 +553,7 @@ end
 
 function matlAddClient(id,name,guild,ip,alias,status)
 	local file= assert(io.open(commandparser.clientspath,"a+"))
-	file:write(string.format("%s;%s;%s;%s;%s;%s",tostring(id),name,tostring(guild),tostring(ip),alias,tostring(status),"\n"))
+	file:write(string.format("%s;%s;%s;%s;%s;%s",tostring(id),name,tostring(guild),tostring(ip),alias,tostring(status)),"\n")
 	file:close()
 end
 
