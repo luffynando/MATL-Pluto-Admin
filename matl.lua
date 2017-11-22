@@ -471,7 +471,7 @@ function onNotify(args)
 end
 
 function iambot()
-	gsc.iprintln("^2[M^7AT^1L] ^3v0.7 ^5by ^1luffy^7nan^2do")
+	gsc.iprintln("^2[M^7AT^1L] ^3v0.8 ^5by ^1luffy^7nan^2do")
 end
 
 function onPlayerConnecting(args)

@@ -513,7 +513,7 @@ function commandparser.groups(player)
 end
 
 function commandparser.credits(player)
-	player:tell("^2[M^7AT^1L] ^3v0.7 ^5by ^2~|^7M^1|~ ^7Clan ^2Maniacos")
+	player:tell("^2[M^7AT^1L] ^3v0.8 ^5by ^2~|^7M^1|~ ^7Clan ^2Maniacos")
 	player:tell("^2[M^7AT^1L] ^3Send^5me ^2Pack ^7in my ^2teamspeak")
 end
 
