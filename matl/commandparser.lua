@@ -798,7 +798,7 @@ function commandparser.balance(player)
 	--balance:setbalance(gsc.getdvar("g_gametype"))
 end
 
-function commandparser.tellall(player)
+function commandparser.tellall(player,args)
 	if args ~= nil and args ~= "" then
 		gsc.iprintlnbold(args)
 	else
@@ -1695,7 +1695,7 @@ function commandparser:init()
 	commandparser.add("fastrestart",2,"!fastrestart")
 	commandparser.add("tell",1,"!tell name,msg")
 	commandparser.add("balance",0,"!balance")
-	commandparser.add("tellall",0,"!tellall msg")
+	commandparser.add("tellall",1,"!tellall msg")
 	commandparser.add("pm",1,"!pm name,msg")
 	commandparser.add("restart",2,"!restart")
 	commandparser.add("scream",1,"!scream msg")

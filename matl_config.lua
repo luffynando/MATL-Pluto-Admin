@@ -249,6 +249,7 @@ config.ban_default_duration=10800
 
 --Alias
 config.alias_len_max=13
+config.capital_letters_enabled=false
 
 --Sensor de ping --aun en progreso
 --config.pingcensor_enabled=true

@@ -15,6 +15,7 @@ vote={}
 enc={}
 commandparser= require "scripts.mp.matl.commandparser"
 commandparser:init()
+
 function succesfulfile(path)
 	print(string.format("%s %s",lang.succesful_create_file,path))
 end
@@ -743,6 +744,7 @@ function addUserWarn(user, msg)
 							}
 	end
 	commandparser:sayAll("^1ADVERTENCIA: ^7".. user.name ..", ^3" ..msg .. " ^2" .. tostring(userWarns[myi].numwarn).. "/"..tostring(config.warn_max_warnings))
+	commandparser:sayTellPlayer(user,"^1ADVERTENCIA: ^7".. user.name ..", ^3" ..msg .. " ^2" .. tostring(userWarns[myi].numwarn).. "/"..tostring(config.warn_max_warnings))
 	if (userWarns[myi].numwarn== config.warn_max_warnings) then
 		--kickeo al usuario
 		util.executeCommand("dropclient "..tostring(user:getentitynumber()))
@@ -836,14 +838,42 @@ function updateDsr(par1,par2,par3)
 end
 
 function getPlayer(peticion, nam)
+	local nom = ""
+	if string.sub(nam,1,1) == "@" then
+		local test= string.sub(nam, 2)
+		if tonumber(test) then
+			for p in util.iterPlayers() do
+				if p:getentitynumber() == tonumber(test) then 
+					return p
+				end
+			end
+			peticion:iPrintLnBold(lang.unban_error_noid)
+			return nil
+		else
+			peticion:iPrintLnBold(lang.unban_error_id_msg)
+			return nil
+		end
+	else
+		if config.capital_letters_enabled then 
+			nom= nam
+		else
+			nom= nam:lower()
+		end
+	end
 	local player= nil
 	local i=1
 	local count =0;
+	local names=""
 	for p in util.iterPlayers() do
-		if p.name == nam then 
+		if config.capital_letters_enabled then
+			names= p.name
+		else
+			names= p.name:lower()
+		end
+		if names == nom then 
 			return p
 		end
-		if string.match(p.name, nam) then
+		if string.match(names, nom) then
 			player= p
 			count= count+1
 		end
@@ -988,7 +1018,7 @@ function onPlayerSay(args)
 			elseif args.chatMode == 1 then
 				for p in util.iterPlayers() do
 					if string.find(p.sessionteam, args.sender.sessionteam) then
-							commandparser:sayToPlayer(p,death.."[T]".. alias .. ": ^7".. args.message)
+						p:tell(death.."[T]".. alias .. ": ^7".. args.message)
 					end
 				end
 			end
